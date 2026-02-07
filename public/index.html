@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Pro - Application Professionnelle de Notes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Écran de chargement -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h2>Notes Pro</h2>
+            <p>Chargement de vos notes...</p>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+                    <path d="M10 12H22M10 16H22M10 20H18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                            <stop stop-color="#667eea"/>
+                            <stop offset="1" stop-color="#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>Notes Pro</h1>
+            </div>
+            <button class="sidebar-toggle" id="sidebar-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="sidebar-user">
+            <div class="user-avatar" id="user-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="user-info">
+                <h3 id="user-name">Mon Compte</h3>
+                <p id="sync-status">Synchronisé</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-view="all-notes">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span>Toutes les notes</span>
+                <span class="count" id="all-notes-count">0</span>
+            </button>
+
+            <button class="nav-item" data-view="favorites">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <span>Favoris</span>
+                <span class="count" id="favorites-count">0</span>
+            </button>
+
+            <button class="nav-item" data-view="categories">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Catégories</span>
+            </button>
+
+            <button class="nav-item" data-view="archive">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                    <rect x="1" y="3" width="22" height="5"></rect>
+                    <line x1="10" y1="12" x2="14" y2="12"></line>
+                </svg>
+                <span>Archives</span>
+                <span class="count" id="archive-count">0</span>
+            </button>
+
+            <button class="nav-item" data-view="trash">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Corbeille</span>
+                <span class="count" id="trash-count">0</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-secondary" id="settings-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m-9-9h6m6 0h6"></path>
+                </svg>
+                <span>Paramètres</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="search-bar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Rechercher dans vos notes...">
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" id="sync-btn" title="Synchroniser">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="view-toggle" title="Changer la vue">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                </button>
+                <button class="btn-primary" id="new-note-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Nouvelle note</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Notes Container -->
+        <div class="notes-container" id="notes-container">
+            <div class="notes-header">
+                <h2 id="view-title">Toutes les notes</h2>
+                <div class="notes-filter">
+                    <select id="sort-select">
+                        <option value="date-desc">Plus récentes</option>
+                        <option value="date-asc">Plus anciennes</option>
+                        <option value="title-asc">Titre (A-Z)</option>
+                        <option value="title-desc">Titre (Z-A)</option>
+                        <option value="modified">Dernière modification</option>
+                    </select>
+                    <select id="category-filter">
+                        <option value="all">Toutes catégories</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="notes-grid" id="notes-grid">
+                <!-- Les notes seront ajoutées ici dynamiquement -->
+            </div>
+
+            <div class="empty-state" id="empty-state">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <h3>Aucune note pour le moment</h3>
+                <p>Créez votre première note pour commencer</p>
+                <button class="btn-primary" id="empty-new-note-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Créer une note
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Éditeur de note -->
+    <div class="modal" id="note-modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modal-title">Nouvelle note</h2>
+                <button class="modal-close" id="close-note-modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="note-editor">
+                    <div class="editor-toolbar">
+                        <div class="toolbar-group">
+                            <button class="toolbar-btn" data-action="bold" title="Gras">
+                                <strong>B</strong>
+                            </button>
+                            <button class="toolbar-btn" data-action="italic" title="Italique">
+                                <em>I</em>
+                            </button>
+                            <button class="toolbar-btn" data-action="underline" title="Souligné">
+                                <u>U</u>
+                            </button>
+                            <button class="toolbar-btn" data-action="strikethrough" title="Barré">
+                                <s>S</s>
+                            </button>
+                        </div>
+                        <div class="toolbar-divider"></div>
+                        <div class="toolbar-group">
+                            <button class="toolbar-btn" data-action="heading" title="Titre">
+                                <span>H</span>
+                            </button>
+                            <button class="toolbar-btn" data-action="list-ul" title="Liste à puces">
+                                <span>•</span>
+                            </button>
+                            <button class="toolbar-btn" data-action="list-ol" title="Liste numérotée">
+                                <span>1.</span>
+                            </button>
+                            <button class="toolbar-btn" data-action="checkbox" title="Case à cocher">
+                                <span>☑</span>
+                            </button>
+                        </div>
+                        <div class="toolbar-divider"></div>
+                        <div class="toolbar-group">
+                            <button class="toolbar-btn" data-action="link" title="Insérer un lien">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                </svg>
+                            </button>
+                            <button class="toolbar-btn" data-action="code" title="Code">
+                                <span>&lt;/&gt;</span>
+                            </button>
+                        </div>
+                        <div class="toolbar-divider"></div>
+                        <div class="toolbar-group">
+                            <button class="toolbar-btn" id="ai-enhance-btn" title="Améliorer avec IA">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                                IA
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <input type="text" class="note-title-input" id="note-title-input" placeholder="Titre de la note...">
+                    
+                    <div class="note-meta">
+                        <select id="note-category" class="note-category-select">
+                            <option value="">Sélectionner une catégorie</option>
+                            <option value="personnel">Personnel</option>
+                            <option value="travail">Travail</option>
+                            <option value="idées">Idées</option>
+                            <option value="projets">Projets</option>
+                            <option value="important">Important</option>
+                        </select>
+                        
+                        <div class="note-tags">
+                            <input type="text" id="tag-input" placeholder="Ajouter des tags (appuyez sur Entrée)">
+                            <div class="tags-list" id="tags-list"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="note-content-editor" id="note-content-editor" contenteditable="true" placeholder="Écrivez votre note ici..."></div>
+                    
+                    <div class="note-footer">
+                        <div class="note-info">
+                            <span id="char-count">0 caractères</span>
+                            <span id="word-count">0 mots</span>
+                        </div>
+                        <div class="note-actions">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="note-favorite">
+                                <span>Favori</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancel-note-btn">Annuler</button>
+                <button class="btn-danger" id="delete-note-btn" style="display: none;">Supprimer</button>
+                <button class="btn-primary" id="save-note-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Enregistrer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Paramètres -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Paramètres</h2>
+                <button class="modal-close" id="close-settings-modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Apparence</h3>
+                    <div class="setting-item">
+                        <label for="theme-select">Thème</label>
+                        <select id="theme-select">
+                            <option value="light">Clair</option>
+                            <option value="dark">Sombre</option>
+                            <option value="auto">Automatique</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="font-size-select">Taille de police</label>
+                        <select id="font-size-select">
+                            <option value="small">Petite</option>
+                            <option value="medium">Moyenne</option>
+                            <option value="large">Grande</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Synchronisation</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="auto-sync">
+                            Synchronisation automatique
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <button class="btn-secondary" id="manual-sync-btn">
+                            Synchroniser maintenant
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Catégories personnalisées</h3>
+                    <div class="setting-item">
+                        <input type="text" id="new-category-input" placeholder="Nouvelle catégorie">
+                        <button class="btn-primary" id="add-category-btn">Ajouter</button>
+                    </div>
+                    <div id="categories-list" class="categories-list"></div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Données</h3>
+                    <div class="setting-item">
+                        <button class="btn-secondary" id="export-data-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Exporter toutes les notes
+                        </button>
+                    </div>
+                    <div class="setting-item">
+                        <button class="btn-danger" id="clear-trash-btn">
+                            Vider la corbeille
+                        </button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>À propos</h3>
+                    <p class="settings-info">Notes Pro v1.0.0</p>
+                    <p class="settings-info">Application de prise de notes professionnelle avec synchronisation cloud</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: IA Enhancement -->
+    <div class="modal" id="ai-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Amélioration IA</h2>
+                <button class="modal-close" id="close-ai-modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="ai-options">
+                    <button class="ai-option-btn" data-action="improve">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                            <polyline points="17 6 23 6 23 12"></polyline>
+                        </svg>
+                        <span>Améliorer le texte</span>
+                    </button>
+                    <button class="ai-option-btn" data-action="grammar">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                        <span>Corriger la grammaire</span>
+                    </button>
+                    <button class="ai-option-btn" data-action="summarize">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="21" y1="10" x2="3" y2="10"></line>
+                            <line x1="21" y1="6" x2="3" y2="6"></line>
+                            <line x1="21" y1="14" x2="3" y2="14"></line>
+                            <line x1="21" y1="18" x2="3" y2="18"></line>
+                        </svg>
+                        <span>Résumer</span>
+                    </button>
+                    <button class="ai-option-btn" data-action="expand">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <polyline points="9 21 3 21 3 15"></polyline>
+                            <line x1="21" y1="3" x2="14" y2="10"></line>
+                            <line x1="3" y1="21" x2="10" y2="14"></line>
+                        </svg>
+                        <span>Développer</span>
+                    </button>
+                    <button class="ai-option-btn" data-action="translate">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m5 8 6 6"></path>
+                            <path d="m4 14 6-6 2-3"></path>
+                            <path d="M2 5h12"></path>
+                            <path d="M7 2h1"></path>
+                            <path d="m22 22-5-10-5 10"></path>
+                            <path d="M14 18h6"></path>
+                        </svg>
+                        <span>Traduire</span>
+                    </button>
+                    <button class="ai-option-btn" data-action="bullets">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                        <span>Convertir en points</span>
+                    </button>
+                </div>
+                <div class="ai-result" id="ai-result" style="display: none;">
+                    <div class="ai-loading">
+                        <div class="loading-spinner-small"></div>
+                        <span>L'IA travaille sur votre texte...</span>
+                    </div>
+                    <div class="ai-output" id="ai-output"></div>
+                    <div class="ai-actions">
+                        <button class="btn-secondary" id="ai-cancel">Annuler</button>
+                        <button class="btn-primary" id="ai-apply">Appliquer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
