@@ -1,0 +1,25 @@
+{
+  "name": "notes-app-pro",
+  "version": "1.0.0",
+  "description": "Application professionnelle de notes avec synchronisation cloud",
+  "main": "api/notes.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build completed'",
+    "start": "vercel dev"
+  },
+  "keywords": [
+    "notes",
+    "mongodb",
+    "vercel",
+    "google-ai"
+  ],
+  "author": "Notes Pro",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
